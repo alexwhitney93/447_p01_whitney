@@ -20,19 +20,27 @@ parser.add_argument("dist", type=int,help="""Type of distribution\n0: Uniform Di
 args = parser.parse_args()
 
 fileid = getUniqueFileID()
-datafilename = "data_" + str(fileid) + ".dat" 
+datafilename = "data_" + str(fileid) + ".dat"
+#datafilename = "data_" + str(fileid) + ".txt" 
 
 fp = open(datafilename,"wb")
+#fp = open(datafilename,"w")
 
 cols = args.cols
 rows = args.rows
 dist = args.dist
 
 # generate file header for datafile
-fp.write("TRAINING")
+fp.write("TRAINING\n")
 fp.write(struct.pack("=q",getUniqueFileID()))
 fp.write(struct.pack("=q",args.rows))
 fp.write(struct.pack("=q",args.cols))
+#fid = str(getUniqueFileID())
+#r = str(args.rows)
+#c = str(args.cols)
+#fp.write(fid + "\n")
+#fp.write(r + "\n")
+#fp.write(c + "\n")
 
 funcList = [random.uniform,random.gauss,random.betavariate,random.expovariate]
 paramList = [(-1000,1000),(0,1000),(30,20),(0.01,)]
@@ -50,6 +58,8 @@ for i in range(0,rows):
     buff = str()
     for j in range(0,cols):
         buff+=struct.pack("=f",funcList[dist](*paramList[dist]))
+        #p = str(funcList[dist](*paramList[dist]))
+        #buff+=p + "\n"
     fp.write(buff)
 fp.close()
 
