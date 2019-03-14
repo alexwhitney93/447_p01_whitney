@@ -3,6 +3,8 @@
 #include <string>
 #include <ostream>
 #include <cstdint> // Use stdint.h if using C.
+#include <fstream>
+#include <iostream>
 
 struct TrainingHeader
 {
@@ -35,7 +37,29 @@ struct ResultsHeader
 int
 main(int argc, char **argv)
 {
-	ifstream infile; 
-    infile.open("silly.dat", ios::binary | ios::in) 
-    infile.read(&x, 7); // reads 7 bytes into a cell that is either 2 or 4
+	/*if(argc != 5)
+	{
+		std::cerr << "usage: ./k-nn n-cores training_file query_file result_file" << std::endl;
+	}*/
+	int n_cores = atoi(argv[1]);
+	TrainingHeader t_header;
+	QueryHeader q_header;
+	ResultsHeader r_header;
+	std::ifstream training_file; 
+    training_file.open(argv[2], std::ios::binary | std::ios::in);
+    char* c_temp;
+    training_file.read(c_temp, 8); // read 8 bytes
+    long l_temp = atol(c_temp);
+	t_header.id = (unsigned int) l_temp;
+    training_file.read(c_temp, 8); // read 8 bytes
+    l_temp = atol(c_temp);
+	t_header.n_points = (unsigned int) l_temp;
+    training_file.read(c_temp, 8); // read 8 bytes
+    l_temp = atol(c_temp);
+	t_header.n_dims = (unsigned int) l_temp;
+	/*
+    training_file.read(t_header.id, 8);
+    training_file.read(t_header.n_points, 8);
+    training_file.read(t_header.n_dims, 8);
+    */
 }
